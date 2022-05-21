@@ -1,4 +1,4 @@
-let mainFunction = function() {
+const mainFunction = () => {
 
     const RESULT_ELEMENT_CLASS_NAME = 'totalStoryPointText';
     const RESULT_TEXT_STYLE = 'color: orange; margin-left: 12px; font-weight: bold;';
@@ -6,7 +6,7 @@ let mainFunction = function() {
     const RESULT_ERROR_MESSAGE = 'Cannot Calculate';
     const STORY_POINT_COLUMN_NAME = 'Story Point';
 
-    function getStoryPointColumnNumber () {
+    const getStoryPointColumnNumber = () => {
         let tableColumnTextElements = document.querySelectorAll('[role=columnheader] span[class^=Text]');
         let tableColumnTextArray = Array.from(tableColumnTextElements).map(element => element.textContent);
         let storyPointIndex = tableColumnTextArray.indexOf(STORY_POINT_COLUMN_NAME);
@@ -17,7 +17,7 @@ let mainFunction = function() {
         return storyPointIndex + 2;
     }
 
-    function createResultElement(style, text) {
+    const createResultElement = (style, text) => {
         let element = document.createElement('span');
         element.className = RESULT_ELEMENT_CLASS_NAME;
         element.style.cssText = style;
@@ -72,14 +72,14 @@ let mainFunction = function() {
 
         let totalStoryPoint = 0;
         tableRows.forEach(tableRow => {
-            let storyPointSpanElement = tableRow.querySelector('[role="cell"]:nth-of-type(' + storyPointColumnNumber + ') span');
+            const storyPointSpanElement = tableRow.querySelector('[role="cell"]:nth-of-type(' + storyPointColumnNumber + ') span');
             if (storyPointSpanElement === null) {
                 return;
             }
             // StoryPointを取得
             // 「10,20」のようにカンマ区切りで複数の値が入力されている場合、最後の値を使用する
-            let storyPointTextArray = storyPointSpanElement.textContent.split(',');
-            let storyPoint = parseInt(storyPointTextArray[storyPointTextArray.length - 1]);
+            const storyPointTextArray = storyPointSpanElement.textContent.split(',');
+            const storyPoint = parseInt(storyPointTextArray[storyPointTextArray.length - 1]);
             totalStoryPoint += storyPoint;
         });
         iterationHeader.appendChild(createResultElement(RESULT_TEXT_STYLE, totalStoryPoint.toString()))
