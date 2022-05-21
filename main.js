@@ -7,9 +7,9 @@ const mainFunction = () => {
     const STORY_POINT_COLUMN_NAME = 'Story Point';
 
     const getStoryPointColumnNumber = () => {
-        let tableColumnTextElements = document.querySelectorAll('[role=columnheader] span[class^=Text]');
-        let tableColumnTextArray = Array.from(tableColumnTextElements).map(element => element.textContent);
-        let storyPointIndex = tableColumnTextArray.indexOf(STORY_POINT_COLUMN_NAME);
+        const tableColumnTextElements = document.querySelectorAll('[role=columnheader] span[class^=Text]');
+        const tableColumnTextArray = Array.from(tableColumnTextElements).map(element => element.textContent);
+        const storyPointIndex = tableColumnTextArray.indexOf(STORY_POINT_COLUMN_NAME);
         if (storyPointIndex === -1) {
             alert('Cannot find Story Point column.')
             throw new Error();
@@ -18,7 +18,7 @@ const mainFunction = () => {
     }
 
     const createResultElement = (style, text) => {
-        let element = document.createElement('span');
+        const element = document.createElement('span');
         element.className = RESULT_ELEMENT_CLASS_NAME;
         element.style.cssText = style;
         element.textContent = text
