@@ -11,7 +11,6 @@ const mainFunction = () => {
         const tableColumnTextArray = Array.from(tableColumnTextElements).map(element => element.textContent);
         const storyPointIndex = tableColumnTextArray.indexOf(STORY_POINT_COLUMN_NAME);
         if (storyPointIndex === -1) {
-            alert('Cannot find Story Point column.')
             throw new Error();
         }
         return storyPointIndex + 2;
@@ -30,6 +29,7 @@ const mainFunction = () => {
     try {
         storyPointColumnNumber = getStoryPointColumnNumber();
     } catch(e) {
+        alert('Cannot find Story Point column.')
         return;
     }
 
