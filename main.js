@@ -72,7 +72,7 @@ const mainFunction = () => {
 
         let totalStoryPoint = 0;
         tableRows.forEach(tableRow => {
-            const storyPointSpanElement = tableRow.querySelector('[role="cell"]:nth-of-type(' + storyPointColumnNumber + ') span');
+            const storyPointSpanElement = tableRow.querySelector('[role="gridcell"]:nth-of-type(' + storyPointColumnNumber + ') span');
             if (storyPointSpanElement === null) {
                 return;
             }
