@@ -1,19 +1,21 @@
 const mainFunction = () => {
 
     const RESULT_ELEMENT_CLASS_NAME = 'totalStoryPointText';
-    const RESULT_TEXT_STYLE = 'color: orange; margin-left: 12px; font-weight: bold;';
+    const TOTAL_POINT_TEXT_STYLE = 'color: orange; margin-left: 12px; font-weight: bold;';
+    const ASSIGNEE_POINT_TEXT_STYLE = 'margin-left: 12px;';
     const RESULT_ERROR_STYLE = 'color: red; margin-left: 12px;';
     const RESULT_ERROR_MESSAGE = 'Cannot Calculate';
     const STORY_POINT_COLUMN_NAME = 'Story Point';
+    const ASSIGNEES_COLUMN_NAME = 'Assignees';
 
-    const getStoryPointColumnNumber = () => {
+    const getColumnNumber = (column_name) => {
         const tableColumnTextElements = document.querySelectorAll('[role=columnheader] span[class^=Text]');
         const tableColumnTextArray = Array.from(tableColumnTextElements).map(element => element.textContent);
-        const storyPointIndex = tableColumnTextArray.indexOf(STORY_POINT_COLUMN_NAME);
-        if (storyPointIndex === -1) {
+        const columnIndex = tableColumnTextArray.indexOf(column_name);
+        if (columnIndex === -1) {
             throw new Error();
         }
-        return storyPointIndex + 2;
+        return columnIndex + 2;
     }
 
     const createResultElement = (style, text) => {
@@ -24,12 +26,17 @@ const mainFunction = () => {
         return element;
     }
 
-    // Story Point が格納されている列番号を設定
+    // 集計結果の要素を全て削除する
+    document.querySelectorAll('[class=' + RESULT_ELEMENT_CLASS_NAME + ']').forEach(element => element.remove())
+
+    // Assignees、Story Point が格納されている列番号を設定
+    let assigneesColumnNumber;
     let storyPointColumnNumber;
     try {
-        storyPointColumnNumber = getStoryPointColumnNumber();
-    } catch(e) {
-        alert('Cannot find Story Point column.')
+        assigneesColumnNumber = getColumnNumber(ASSIGNEES_COLUMN_NAME);
+        storyPointColumnNumber = getColumnNumber(STORY_POINT_COLUMN_NAME);
+    } catch (e) {
+        alert('Cannot find column.')
         return;
     }
 
@@ -70,19 +77,66 @@ const mainFunction = () => {
             }
         }
 
+        // assigneeStoryPoints = {
+        //   'Aさん' => 10,
+        //   'Bさん' => 5,
+        //   'Cさん' => 15,
+        // }
+        const assigneeStoryPoints = {};
         let totalStoryPoint = 0;
         tableRows.forEach(tableRow => {
+            // StoryPointを取得
             const storyPointSpanElement = tableRow.querySelector('[role="gridcell"]:nth-of-type(' + storyPointColumnNumber + ') span');
             if (storyPointSpanElement === null) {
                 return;
             }
-            // StoryPointを取得
+
             // 「10,20」のようにカンマ区切りで複数の値が入力されている場合、最後の値を使用する
             const storyPointTextArray = storyPointSpanElement.textContent.split(',');
-            const storyPoint = parseInt(storyPointTextArray[storyPointTextArray.length - 1]);
+            const storyPoint = parseFloat(storyPointTextArray[storyPointTextArray.length - 1]);
             totalStoryPoint += storyPoint;
+
+            // Assigneeを取得
+            const assigneesSpanElements = tableRow.querySelectorAll('[role="gridcell"]:nth-of-type(' + assigneesColumnNumber + ') [class^=Text]');
+            if (assigneesSpanElements.length === 0) {
+                return;
+            }
+
+            // 複数人アサインされている場合、「A and B」「A, B, and C」の形式の文字列が格納されるため、不要な文字列を消す
+            const assigneesTextArray = assigneesSpanElements[assigneesSpanElements.length - 1]
+              .textContent
+              .replaceAll('and', '')
+              .replaceAll(',', '')
+              .split(' ')
+              .filter(assignee => assignee)
+              .map(assignee => assignee.trim());
+
+            assigneesTextArray.forEach(assignee => {
+                if (assignee in assigneeStoryPoints) {
+                    assigneeStoryPoints[assignee] += storyPoint / assigneesTextArray.length;
+                } else {
+                    assigneeStoryPoints[assignee] = storyPoint / assigneesTextArray.length;
+                }
+            })
         });
-        iterationHeader.appendChild(createResultElement(RESULT_TEXT_STYLE, totalStoryPoint.toString()))
+
+        // 全体のストーリーポイントの合計を表示する
+        iterationHeader.appendChild(
+          createResultElement(
+            TOTAL_POINT_TEXT_STYLE,
+            totalStoryPoint.toString()
+          )
+        )
+
+        // 人ごとのストーリーポイントの合計を表示する
+        Object.keys(assigneeStoryPoints).forEach(assignee => {
+            iterationHeader.appendChild(
+              createResultElement(
+                ASSIGNEE_POINT_TEXT_STYLE,
+                assignee + ' : ' + assigneeStoryPoints[assignee].toFixed(1)
+              )
+            )
+        });
     })
 };
 
