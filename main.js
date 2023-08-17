@@ -40,7 +40,8 @@ const mainFunction = () => {
         return;
     }
 
-    const iterations = document.querySelectorAll('[data-test-id^=table-group-Iteration]');
+    const iterations = document.querySelectorAll('[data-testid^=table-group-Iteration]');
+
     iterations.forEach(iteration => {
 
         // 各Iterationのブロックと行は、画面の中に入った時に生成され、画面から外れると削除される
@@ -59,7 +60,7 @@ const mainFunction = () => {
         }
 
         // 中身がある場合、各セクションのヘッダーの横に計算結果を表示するため、ヘッダー要素を取得する
-        const iterationHeader = iteration.querySelector('[data-test-id^=table-group-header-Iteration]');
+        const iterationHeader = iteration.querySelector('[data-testid^=group-header-Iteration]');
 
         // すでに表示されている結果がある場合は削除しておく
         const oldResultElement = iterationHeader.getElementsByClassName(RESULT_ELEMENT_CLASS_NAME)[0];
