@@ -9,7 +9,7 @@ const mainFunction = () => {
     const ASSIGNEES_COLUMN_NAME = 'Assignees';
 
     const getColumnNumber = (column_name) => {
-        const tableColumnTextElements = document.querySelectorAll('[role=columnheader] span[class^=Text]');
+        const tableColumnTextElements = document.querySelectorAll('[role=columnheader] span[class^=Box]');
         const tableColumnTextArray = Array.from(tableColumnTextElements).map(element => element.textContent);
         const columnIndex = tableColumnTextArray.indexOf(column_name);
         if (columnIndex === -1) {
@@ -98,13 +98,13 @@ const mainFunction = () => {
             totalStoryPoint += storyPoint;
 
             // Assigneeを取得
-            const assigneesSpanElements = tableRow.querySelectorAll('[role="gridcell"]:nth-of-type(' + assigneesColumnNumber + ') [class^=Text]');
+            const assigneesSpanElements = tableRow.querySelectorAll('[role="gridcell"]:nth-of-type(' + assigneesColumnNumber + ') [class^=Box]');
             if (assigneesSpanElements.length === 0) {
                 return;
             }
 
             // 複数人アサインされている場合、「A and B」「A, B, and C」の形式の文字列が格納されるため、不要な文字列を消す
-            const assigneesTextArray = assigneesSpanElements[assigneesSpanElements.length - 1]
+            const assigneesTextArray = assigneesSpanElements[assigneesSpanElements.length - 2]
               .textContent
               .replaceAll('and', '')
               .replaceAll(',', '')
