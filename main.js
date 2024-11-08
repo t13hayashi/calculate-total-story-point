@@ -104,7 +104,7 @@ const mainFunction = () => {
             }
 
             // 複数人アサインされている場合、「A and B」「A, B, and C」の形式の文字列が格納されるため、不要な文字列を消す
-            const assigneesTextArray = assigneesSpanElements[assigneesSpanElements.length - 2]
+            const assigneesTextArray = assigneesSpanElements[assigneesSpanElements.length - 3]
               .textContent
               .replaceAll('and', '')
               .replaceAll(',', '')
