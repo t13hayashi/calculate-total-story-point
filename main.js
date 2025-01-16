@@ -3,8 +3,6 @@ const mainFunction = () => {
     const RESULT_ELEMENT_CLASS_NAME = 'totalStoryPointText';
     const TOTAL_POINT_TEXT_STYLE = 'color: orange; margin-left: 12px; font-weight: bold;';
     const ASSIGNEE_POINT_TEXT_STYLE = 'margin-left: 12px;';
-    const RESULT_ERROR_STYLE = 'color: red; margin-left: 12px;';
-    const RESULT_ERROR_MESSAGE = 'Cannot Calculate';
     const STORY_POINT_COLUMN_NAME = 'Story Point';
     const ASSIGNEES_COLUMN_NAME = 'Assignees';
 
@@ -40,7 +38,7 @@ const mainFunction = () => {
         return;
     }
 
-    const iterations = document.querySelectorAll('[data-testid^=table-group-Iteration]');
+    const iterations = document.querySelectorAll('[role="rowgroup"]');
 
     iterations.forEach(iteration => {
 
@@ -60,22 +58,12 @@ const mainFunction = () => {
         }
 
         // 中身がある場合、各セクションのヘッダーの横に計算結果を表示するため、ヘッダー要素を取得する
-        const iterationHeader = iteration.querySelector('[data-testid^=group-header-Iteration]');
+        const iterationHeader = tableRows[0];
 
         // すでに表示されている結果がある場合は削除しておく
         const oldResultElement = iterationHeader.getElementsByClassName(RESULT_ELEMENT_CLASS_NAME)[0];
         if (oldResultElement) {
             oldResultElement.remove();
-        }
-
-        // Iterationの中身が存在するが、全ての行のHTMLが生成されていない場合はエラーメッセージを出力する
-        // 空のdivが存在するかどうかをチェックする
-        const iterationContent = iteration.children[0].children;
-        for (const div of iterationContent) {
-            if (div.innerHTML === "") {
-                iterationHeader.appendChild(createResultElement(RESULT_ERROR_STYLE, RESULT_ERROR_MESSAGE));
-                return;
-            }
         }
 
         // assigneeStoryPoints = {
