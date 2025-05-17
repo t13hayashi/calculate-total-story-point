@@ -7,9 +7,9 @@ const mainFunction = () => {
     const ASSIGNEES_COLUMN_NAME = 'Assignees';
 
     const getColumnNumber = (column_name) => {
-        const tableColumnTextElements = document.querySelectorAll('[role=columnheader] span[class^=Box]');
+        const tableColumnTextElements = document.querySelectorAll('div[role="columnheader"][class^=Box]');
         const tableColumnTextArray = Array.from(tableColumnTextElements).map(element => element.textContent);
-        const columnIndex = tableColumnTextArray.indexOf(column_name);
+        const columnIndex = tableColumnTextArray.findIndex(text => text.includes(column_name));
         if (columnIndex === -1) {
             throw new Error();
         }
